@@ -7,6 +7,7 @@ import userRoutes from "./src/routes/userRoutes.js";
 import interviewRoutes from "./src/routes/interviewRoutes.js";
 dotenv.config();
 import codeRoutes from "./src/routes/codeRoutes.js";
+import speechRoutes from "./src/routes/speechRoutes.js";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/interview",interviewRoutes)
 app.use("/api/code",codeRoutes);
+app.use("/api/speech", speechRoutes)
 // DB Connection
 const connectDB = async () => {
   try {

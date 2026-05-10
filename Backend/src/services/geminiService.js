@@ -1,53 +1,86 @@
 import axios from "axios";
 
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
-export const generateReview = async ({ question, code, status, failedTestCase }) => {
+export const generateReview = async ({ questions, submissions, speech }) => {
   try {
     const prompt = `
-You are a senior software engineer interviewer.
+You are a strict DSA interviewer.
 
-Analyze the candidate's solution.
+Evaluate candidate on:
+- Code correctness
+- Efficiency
+- Attempts
+- Communication
 
-Question:
-${question}
+Questions:
+${JSON.stringify(questions)}
 
-Candidate Code:
-${code}
+Submissions:
+${JSON.stringify(submissions).slice(0, 3000)}
 
-Result:
-${status}
+Speech:
+${speech}
 
-Failed Test Case:
-${failedTestCase ? JSON.stringify(failedTestCase) : "None"}
+Return ONLY JSON:
 
-Give structured feedback:
-
-1. Correctness
-2. Approach
-3. Time & Space Complexity
-4. Mistakes
-5. Suggestions
-6. Final Verdict (Strong / Average / Weak)
-
-Keep it concise and professional.
+{
+  "score": number,
+  "codeQuality": number,
+  "problemSolving": number,
+  "communication": number,
+  "strengths": ["..."],
+  "weaknesses": ["..."],
+  "feedback": "..."
+}
 `;
 
     const response = await axios.post(
-      `${GEMINI_URL}?key=${process.env.GEMINI_API_KEY}`,
+      GROQ_URL,
       {
-        contents: [
-          {
-            parts: [{ text: prompt }],
-          },
-        ],
+        model: "llama-3.1-8b-instant",
+        messages: [{ role: "user", content: prompt }],
+        response_format: { type: "json_object" },
+        temperature: 0.3,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+          "Content-Type": "application/json",
+        },
       }
     );
 
-    return response.data.candidates[0].content.parts[0].text;
+    const raw = response.data.choices?.[0]?.message?.content || "{}";
+
+    let parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      parsed = {
+        score: 0,
+        codeQuality: 0,
+        problemSolving: 0,
+        communication: 0,
+        strengths: [],
+        weaknesses: [],
+        feedback: raw,
+      };
+    }
+
+    return parsed;
 
   } catch (err) {
-    console.log("🔥 GEMINI ERROR:", err.response?.data || err.message);
-    return "AI review not available.";
+    console.log("🔥 GROQ ERROR:", err.response?.data || err.message);
+
+    return {
+      score: 0,
+      codeQuality: 0,
+      problemSolving: 0,
+      communication: 0,
+      strengths: [],
+      weaknesses: [],
+      feedback: "AI evaluation failed",
+    };
   }
 };

@@ -13,10 +13,14 @@ const questionSchema = new mongoose.Schema(
         hint:{
             type:String,
         },
+        inputFormat: String,
+        outputFormat: String,
+        constraints: String,
         sampleTestCases: [
             {
                 input: String,
                 output: String,
+                explanation: String,
             },
         ],
         hiddenTestCases: [
@@ -25,6 +29,11 @@ const questionSchema = new mongoose.Schema(
                 output:String,
             },
         ],
+        starterCode:{
+            javascript: String,
+            python: String,
+            cpp: String,
+        },
     }
 );
 

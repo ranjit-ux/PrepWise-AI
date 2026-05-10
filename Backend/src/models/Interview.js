@@ -36,6 +36,24 @@ const interviewSchema = new mongoose.Schema(
         review: {
             type:String,
             default:"",
+        },
+        codeSubmission: [
+            {
+                questionId: {
+                    type:mongoose.Schema.Types.ObjectId,
+                    ref:"Question"
+                },
+                code:String,
+                result: String
+            }
+        ],
+        speechTranscript: {
+            type: String,
+            default:""
+        },
+        report: {
+            type:Object,
+            default:null
         }
     },
     {timestamps:true}
