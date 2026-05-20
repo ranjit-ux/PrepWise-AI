@@ -8,11 +8,21 @@ import interviewRoutes from "./src/routes/interviewRoutes.js";
 dotenv.config();
 import codeRoutes from "./src/routes/codeRoutes.js";
 import speechRoutes from "./src/routes/speechRoutes.js";
-
+ 
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://prep-wise-ai-nu.vercel.app",
+      "https://prep-wise-fdqv55p77-ranjit-kumar-singhs-projects.vercel.app",
+    ],
+    credentials: true,
+  })
+);
+
+
 app.use(express.json());
 
 // Routes
