@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Loader } from "./temp";
+import { Loader } from "./ui";
 
 /* ─── Result Badge ─── */
 function ResultBadge({ status, message }) {
