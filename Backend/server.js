@@ -12,19 +12,18 @@ import speechRoutes from "./src/routes/speechRoutes.js";
 const app = express();
 
 // Middleware
-app.use(
-  cors({
-    origin: [
-      "https://prep-wise-ai-nu.vercel.app",
-      "https://prep-wise-fdqv55p77-ranjit-kumar-singhs-projects.vercel.app",
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],  
-    allowedHeaders: ["Content-Type", "Authorization"],     
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: [
+    "https://prep-wise-ai-nu.vercel.app",
+    "https://prep-wise-fdqv55p77-ranjit-kumar-singhs-projects.vercel.app",
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
 
-app.options(/.*/, cors());
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions)); 
 
 
 app.use(express.json());
