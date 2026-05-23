@@ -16,9 +16,10 @@ const corsOptions = {
   origin: [
     "https://prep-wise-ai-nu.vercel.app",
     "https://prep-wise-fdqv55p77-ranjit-kumar-singhs-projects.vercel.app",
+    "http://localhost:5173",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "ngrok-skip-browser-warning"],
   credentials: true,
 };
 
