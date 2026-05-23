@@ -4,6 +4,9 @@ const API = axios.create({
   // baseURL: "http://localhost:5000/api",
 
     baseURL: " https://hazily-accuracy-tavern.ngrok-free.dev/api",
+    headers: {
+      'ngrok-skip-browser-warning': 'true' 
+    }
 });
 
 // Attach token to every request
